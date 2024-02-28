@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Produto</title>
+</head>
+
+<body>
+    <!-- FORMS PARA CADASTRO DE NOVOS PRODUTOS -->
+    <form method="post" action="">
+        <label for="produto">Produto:</label>
+        <input type="text" name="produto" placeholder="Digite o nome do produto"><br>
+
+        <label for="preco">Preço:</label>
+        <input type="text" name="preco" id="preco" placeholder="Preço"><br>
+
+        <input type="submit" value="Cadastrar">
+    </form>
+
+    <?php
+    //VERIFICA SE O MÉTODO DE REQUISIÇÃO É POST. INDICANDO QUE O FORMULÁRIO FOI ENVIADO.
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        //Estabelece conexão com server localhost, com usuário, senha [] e seleção da DB based
+        $conexao = mysqli_connect("localhost", "root", "", "based");
+        //VERIFICA SE A CONEXÃO FOI BEM SUCEDIDA
+        if (!$conexao) {
+            die('Erro na conexao:' . mysqli_connect_error());
+        }
+        //VERIFICA SE OS CAMPOS PRODUTO E PRECO FORAM FORNECIDOS.
+        if (isset($_POST["produto"]) && isset($_POST["preco"])) {
+
+            //OBTÉM OS VALORES DO FORMULÁRIO
+            $produto = $_POST["produto"];
+            $preco = $_POST["preco"];
+
+            //INSERE OS VALORES NA TABELA MENU
+            $insereProduto = "INSERT INTO menu (produto,preco) VALUES ('$produto','$preco')";
+
+            //EXECUTA A CONSULTA, E SE O CADASTRO FOR BEM-SUCEDIDO RETORNA A MENSAGEM
+            if (mysqli_query($conexao, $insereProduto)) {
+                echo 'Produto cadastrado.';
+            } else {
+                //SE HOUVER ERRO NO CADASTRO SERÁ RETORNADA A MENSAGEM DE ERRO
+                echo 'Falha no cadastro de produto:' . mysqli_error($conexao);
+            }
+        } else {
+            echo 'Campos Produto e Preço não preenchidos.';
+        }
+        //FECHA A CONEXÃO COM SERVER
+        mysqli_close($conexao);
+    }
+    ?>
+
+</body>
+
+</html>
