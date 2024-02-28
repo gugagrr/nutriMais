@@ -1,0 +1,39 @@
+<?php
+//Estabelece uma conexão com o host local, usando usuário root e senha []
+$conexao = mysqli_connect("localhost", "root", "");
+
+if (!$conexao) {
+    //Esta linha mostra mensagem em caso de erro de conexão
+    die('Erro na conexão:' . mysqli_connect_error());
+}
+
+//Esta linha realiza conexão com DB
+$db_selected = mysqli_select_db($conexao, "based");
+
+//Esta linha verifica se a conexão com DB foi estabelecida
+if (!$db_selected) {
+    die('Não foi possível selecionar o banco de dados:' . mysqli_error($conexao));
+}
+
+//Criar tabela "menu"
+ $criar_tabela = "CREATE TABLE if not exists menu(
+        produto char(50),
+        preco float
+        )";
+
+ //Executa a query para criar a TABELA e verificação em caso de ERRO
+  if (!mysqli_query($conexao, $criar_tabela)) {
+      echo 'Erro ao criar tabela:' . mysqli_error($conexao);
+ }
+
+//Deletar tabela
+// $deletar = "DROP table menu";
+// mysqli_query($conexao, $deletar);
+// if (mysqli_query($conexao, $deletar)) {
+//     echo 'Tabela deletada:' . mysqli_error($conexao);
+//  } else {
+//     echo 'Erro ao deletar tabela'
+//  }
+
+
+?>
