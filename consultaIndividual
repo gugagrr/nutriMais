@@ -1,0 +1,53 @@
+<?php
+$conexao = mysqli_connect("localhost","root","");
+
+if(!$conexao){
+    die('Erro na conexao:'.mysqli_connect_error());
+}
+$db_selected = mysqli_select_db($conexao,"based");
+
+if(!$db_selected)
+    {
+        die('Não foi possível selecionar o banco de dados:'.mysqli_error($conexao));    
+    }
+if (isset($_GET['nome'])){
+    $nome = $_GET['nome'];
+
+    $consulta_individual = "SELECT nome, telefone, sexo, cargo, setor, turno, ramal, email, matricula FROM colaboradores WHERE nome ='$nome'";
+
+    $resultado_individual = mysqli_query($conexao,$consulta_individual);
+
+    if ($resultado_individual){
+        if(mysqli_num_rows($resultado_individual)>0){
+
+            echo '<br>Dados da consulta individual por nome:<br>';
+            echo '<table border="1">';
+            echo '<tr><th>Nome</th><th>Telefone</th><th>Sexo</th><th>Cargo</th><th>Setor</th><th>Turno</th><th>Ramal</th><th>E-mail Corporativo</th><th>Matrícula</th></tr>';
+
+            while ($row_individual = mysqli_fetch_assoc($resultado_individual)){
+                echo '<tr>';
+                echo '<td>'.$row['nome'].'</td>';
+                echo '<td>'.$row['telefone'].'</td>';
+                echo '<td>'.$row['sexo'].'</td>';
+                echo '<td>'.$row['cargo'].'</td>';
+                echo '<td>'.$row['setor'].'</td>';
+                echo '<td>'.$row['turno'].'</td>';
+                echo '<td>'.$row['ramal'].'</td>';
+                echo '<td>'.$row['email'].'</td>';
+                echo '<td>'.$row['matricula'].'</td>';
+                echo '</tr>';
+            }
+            echo '</table>';
+        } else {
+            echo 'Nenhum resultado encontrado para o nome:'.$nome;
+        }
+        mysqli_free_result($resultado_individual);
+    }
+    else{
+        echo 'Erro ao executar a consulta individual:'.mysqli_error($conexao);
+    }
+}else{
+    echo 'Nome inválido ou não fornecido.';
+    }
+mysqli_close($conexao);
+?>
