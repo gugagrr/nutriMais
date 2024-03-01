@@ -1,0 +1,48 @@
+<?php
+$conexao = mysqli_connect("localhost","root","");
+
+if(!$conexao){
+    die('Erro na conexao:'.mysqli_connect_error());
+}
+$db_selected = mysqli_select_db($conexao,"based");
+
+if(!$db_selected)
+    {
+        die('Não foi possível selecionar o banco de dados:'.mysqli_error($conexao));    
+    }
+//Monta a query SQL para consulta de dados
+$consulta = "SELECT nome, telefone, sexo, cargo, setor, turno, ramal, email, matricula FROM colaboradores";
+
+//Executa a query de consulta
+$resultado = mysqli_query($conexao,$consulta);
+
+//Verifica se a consulta foi bem sucedida e exibe a tabel HTML
+if($resultado){
+    echo '<br>Dados na tabela:<br>';
+    echo '<table border="1">';
+    echo '<tr><th>Nome</th><th>Telefone</th><th>Sexo</th><th>Cargo</th><th>Setor</th><th>Turno</th><th>Ramal</th><th>E-mail Corporativo</th><th>Matrícula</th></tr>';
+
+    //Loop para exibir os resultados em linhas da tabela
+    while ($row = mysqli_fetch_assoc($resultado)){
+        echo '<tr>';
+        echo '<td>'.$row['nome'].'</td>';
+        echo '<td>'.$row['telefone'].'</td>';
+        echo '<td>'.$row['sexo'].'</td>';
+        echo '<td>'.$row['cargo'].'</td>';
+        echo '<td>'.$row['setor'].'</td>';
+        echo '<td>'.$row['turno'].'</td>';
+        echo '<td>'.$row['ramal'].'</td>';
+        echo '<td>'.$row['email'].'</td>';
+        echo '<td>'.$row['matricula'].'</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+    //Libera o resultado da memória
+    mysqli_free_result($resultado);
+} else {
+    //Exibe mensagem de erro se a consulta falhar
+    echo 'Erro ao executar a consulta:'.mysqli_error($conexao);
+}
+//Fecha a conexão com server
+mysqli_close($conexao);
+?>
